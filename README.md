@@ -8,7 +8,7 @@ The original idea is from https://github.com/cb372/scala-ascii-art
 
 play.plugins
 ```
-1000:com.github.tototoshi.aa.AAPlugin
+1000:com.github.tototoshi.play2.aa.AAPlugin
 ```
 
 conf/application.conf
