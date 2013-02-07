@@ -2,7 +2,7 @@
 
 The original idea is from https://github.com/cb372/scala-ascii-art
 
-[Yotuba](screenshot.jpg)
+![Yotuba](screenshot.jpg)
 
 ## Configuration
 
