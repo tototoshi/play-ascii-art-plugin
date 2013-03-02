@@ -4,6 +4,11 @@ The original idea is from https://github.com/cb372/scala-ascii-art
 
 ![Yotuba](screenshot.jpg)
 
+## Install
+```scala
+libraryDependencies ++= "com.github.tototoshi" %% "play2-ascii-art-plugin" % "0.1.0"
+```
+
 ## Configuration
 
 play.plugins
