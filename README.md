@@ -1,4 +1,4 @@
-# play2-ascii-art-module
+# play2-ascii-art-plugin
 
 The original idea is from https://github.com/cb372/scala-ascii-art
 
