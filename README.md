@@ -30,7 +30,3 @@ aa.image.onstop=conf/yotuba2.jpg
 aa.image.width=60
 ```
 
-Run with -Djava.awt.headless=true
-```
- $ play -Djava.awt.headless=true run
-```

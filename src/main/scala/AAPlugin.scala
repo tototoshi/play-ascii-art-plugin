@@ -4,17 +4,19 @@ import play.api._
 import scala.math._
 import java.io.File
 import javax.imageio._
-import java.awt.{ Color, RenderingHints }
+import java.awt.{Color, RenderingHints}
 import java.awt.image._
 
 class AAPlugin(app: Application) extends Plugin {
 
-  private val asciiChars = List("#","A","@","%", "$","+","=","*", ":",",","."," ")
+  private val asciiChars = List("#", "A", "@", "%", "$", "+", "=", "*", ":", ",", ".", " ")
 
-  private def rgbMax(red:Int, green:Int, blue:Int) =
+  private val JAVA_AWT_HEADLESS = "java.awt.headless"
+
+  private def rgbMax(red: Int, green: Int, blue: Int) =
     List(red, green, blue).reduceLeft(max)
 
-  private def chooseChar(rgbPeak:Double) = rgbPeak match {
+  private def chooseChar(rgbPeak: Double) = rgbPeak match {
     case 0 => asciiChars.last
     case n => {
       val index = ((asciiChars.length * (rgbPeak / 255)) - (0.5)).toInt
@@ -22,7 +24,7 @@ class AAPlugin(app: Application) extends Plugin {
     }
   }
 
-  private def scaleImage(image:BufferedImage, width:Int) = {
+  private def scaleImage(image: BufferedImage, width: Int) = {
     val height = ((width.toDouble / image.getWidth) * image.getHeight).toInt
     val scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
     val gfx = scaledImage.createGraphics()
@@ -32,11 +34,11 @@ class AAPlugin(app: Application) extends Plugin {
     scaledImage
   }
 
-  private def convertImage(image:BufferedImage) = {
+  private def convertImage(image: BufferedImage) = {
     val h = image.getHeight()
     val w = image.getWidth()
-    for (y <- 0 to h-1) yield {
-      for (x <- 0 to w-1) yield {
+    for (y <- 0 to h - 1) yield {
+      for (x <- 0 to w - 1) yield {
         val pixel = new Color(image.getRGB(x, y))
         chooseChar(rgbMax(pixel.getRed, pixel.getGreen, pixel.getBlue))
       }
@@ -54,12 +56,22 @@ class AAPlugin(app: Application) extends Plugin {
     app.configuration.getInt("aa.image.width").getOrElse(defaultWidth)
   }
 
+  private def withHeadless(f: => Unit): Unit = {
+    val backup = Option(System.getProperty(JAVA_AWT_HEADLESS)).getOrElse("false")
+    System.setProperty(JAVA_AWT_HEADLESS, "true")
+    f
+    System.setProperty(JAVA_AWT_HEADLESS, backup)
+  }
+
   /**
    * Called when the application starts.
    */
   override def onStart(): Unit = {
-    app.configuration.getString("aa.image.onstart").foreach { image =>
-      println(createAsciiArt(new File(image), imageWidth))
+    withHeadless {
+      app.configuration.getString("aa.image.onstart").foreach {
+        image =>
+          println(createAsciiArt(new File(image), imageWidth))
+      }
     }
   }
 
@@ -67,8 +79,11 @@ class AAPlugin(app: Application) extends Plugin {
    * Called when the application stops.
    */
   override def onStop(): Unit = {
-    app.configuration.getString("aa.image.onstop").foreach { image =>
-      println(createAsciiArt(new File(image), imageWidth))
+    withHeadless {
+      app.configuration.getString("aa.image.onstop").foreach {
+        image =>
+          println(createAsciiArt(new File(image), imageWidth))
+      }
     }
   }
 

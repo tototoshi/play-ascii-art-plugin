@@ -9,7 +9,7 @@ object Build extends Build {
     settings = Project.defaultSettings ++ Seq(
       name := "play2-ascii-art-plugin",
       organization := "com.github.tototoshi",
-      version := "0.1.0",
+      version := "0.1.1",
       scalaVersion := "2.10.0",
       scalacOptions ++= Seq("-feature"),
       resolvers ++= Seq(
