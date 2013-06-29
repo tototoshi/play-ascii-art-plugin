@@ -1,26 +1,46 @@
+import com.typesafe.sbt.SbtScalariform.scalariformSettings
 import sbt._
 import sbt.Keys._
 
 object Build extends Build {
 
-  lazy val aaPlugin = Project(
+  lazy val _version = "0.2.0-SNAPSHOT"
+  lazy val _scalaVersion = "2.10.0"
+  lazy val _playVersion = "2.1.1"
+
+  lazy val plugin = Project(
     id = "play2-ascii-art-plugin",
-    base = file("."),
+    base = file("plugin"),
     settings = Project.defaultSettings ++ Seq(
       name := "play2-ascii-art-plugin",
       organization := "com.github.tototoshi",
-      version := "0.1.1",
-      scalaVersion := "2.10.0",
+      version := _version,
+      scalaVersion := _scalaVersion,
       scalacOptions ++= Seq("-feature"),
       resolvers ++= Seq(
         "typesafe" at "http://repo.typesafe.com/typesafe/releases"
       ),
       libraryDependencies ++= Seq(
-        "play" %% "play" % "2.1.0" % "provided",
-        "play" %% "play-test" % "2.1.0" % "test"
+        "play" %% "play" % _playVersion % "provided",
+        "play" %% "play-test" % _playVersion % "test"
       )
     ) ++ publishingSettings
   )
+
+  lazy val _testAppName = "test-app"
+  lazy val _testAppVersion = _playVersion
+  lazy val _testAppDependencies = Seq()
+
+  val testapp =
+    play.Project(
+      _testAppName,
+      _testAppVersion,
+      _testAppDependencies,
+      path = file("testapp")
+    ).settings(scalariformSettings:_*)
+  .settings(resourceDirectories in Test <+= baseDirectory / "conf")
+  .dependsOn(plugin)
+  .aggregate(plugin)
 
   val publishingSettings = Seq(
     publishMavenStyle := true,
