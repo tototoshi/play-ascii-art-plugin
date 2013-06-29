@@ -2,12 +2,13 @@ package com.github.tototoshi.play2.aa
 
 import play.api._
 import scala.math._
-import java.io.File
+import java.io.{InputStream, File}
 import javax.imageio._
 import java.awt.{Color, RenderingHints}
 import java.awt.image._
+import resource._
 
-class AAPlugin(app: Application) extends Plugin {
+class AAPlugin(implicit app: Application) extends Plugin {
 
   private val asciiChars = List("#", "A", "@", "%", "$", "+", "=", "*", ":", ",", ".", " ")
 
@@ -45,7 +46,7 @@ class AAPlugin(app: Application) extends Plugin {
     }
   }
 
-  private def createAsciiArt(imageFile: File, width: Int): String = {
+  private def createAsciiArt(imageFile: InputStream, width: Int): String = {
     val image = scaleImage(ImageIO.read(imageFile), width)
     val spans = convertImage(image)
     spans.map(_.mkString).mkString("\n")
@@ -63,29 +64,29 @@ class AAPlugin(app: Application) extends Plugin {
     System.setProperty(JAVA_AWT_HEADLESS, backup)
   }
 
+  private def printAA(resourceName: String): Unit = {
+    for {
+      r <- app.configuration.getString(resourceName)
+      _ = Logger.debug(resourceName + ": " + r)
+      in <- Play.resourceAsStream(r)
+      managedIn <- managed(in)
+    } {
+      println(createAsciiArt(managedIn, imageWidth))
+    }
+  }
+
+
   /**
    * Called when the application starts.
    */
-  override def onStart(): Unit = {
-    withHeadless {
-      app.configuration.getString("aa.image.onstart").foreach {
-        image =>
-          println(createAsciiArt(new File(image), imageWidth))
-      }
-    }
-  }
+  override def onStart(): Unit =
+    withHeadless { printAA("aa.image.onstart") }
 
   /**
    * Called when the application stops.
    */
-  override def onStop(): Unit = {
-    withHeadless {
-      app.configuration.getString("aa.image.onstop").foreach {
-        image =>
-          println(createAsciiArt(new File(image), imageWidth))
-      }
-    }
-  }
+  override def onStop(): Unit =
+    withHeadless { printAA("aa.image.onstop") }
 
   /**
    * Is the plugin enabled?
