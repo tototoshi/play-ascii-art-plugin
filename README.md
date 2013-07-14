@@ -24,8 +24,8 @@ play.plugins
 ```
 
 Specify the name of resource to show as ascii-art in your conf/application.conf.
-For example, write as follows if you want to show conf/yotuba1.jpg on starting your application
-and conf/yotuba2.jpg on stopping.
+For example, write as follows if you want to show `conf/yotuba1.jpg` on starting your application
+and `conf/yotuba2.jpg` on stopping.
 ```
 aa.image.onstart=yotuba1.jpg
 aa.image.onstop=yotuba2.jpg
