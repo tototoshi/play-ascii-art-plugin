@@ -12,16 +12,17 @@ The original idea is from https://github.com/cb372/scala-ascii-art
 ref: http://yotuba.com/
 
 ## Install
+In your build.sbt or Build.scala.
 ```scala
 libraryDependencies += "com.github.tototoshi" %% "play2-ascii-art-plugin" % "0.1.0"
 ```
 
-## Configuration
-
-play.plugins
+In your play.plugins.
 ```
 1000:com.github.tototoshi.play2.aa.AAPlugin
 ```
+
+## Configuration
 
 Specify the name of resource to show as ascii-art in your conf/application.conf.
 For example, write as follows if you want to show `conf/yotuba1.jpg` on starting your application
