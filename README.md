@@ -14,7 +14,7 @@ ref: http://yotuba.com/
 ## Install
 In your build.sbt or Build.scala.
 ```scala
-libraryDependencies += "com.github.tototoshi" %% "play2-ascii-art-plugin" % "0.1.0"
+libraryDependencies += "com.github.tototoshi" %% "play2-ascii-art-plugin" % "0.2.0"
 ```
 
 In your play.plugins.
