@@ -23,10 +23,16 @@ play.plugins
 1000:com.github.tototoshi.play2.aa.AAPlugin
 ```
 
-conf/application.conf
+Specify the name of resource to show as ascii-art in your conf/application.conf.
+For example, write as follows if you want to show conf/yotuba1.jpg on starting your application
+and conf/yotuba2.jpg on stopping.
 ```
-aa.image.onstart=conf/yotuba1.jpg
-aa.image.onstop=conf/yotuba2.jpg
-aa.image.width=60
+aa.image.onstart=yotuba1.jpg
+aa.image.onstop=yotuba2.jpg
 ```
 
+The width of ascii-art is 80 by default. But maybe sometimes your images are too big or small.
+You can specify the width of ascii-art to adjust the image to your console.
+```
+aa.image.width=60
+```
