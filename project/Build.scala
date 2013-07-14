@@ -24,7 +24,7 @@ object Build extends Build {
         "play" %% "play" % _playVersion % "provided",
         "play" %% "play-test" % _playVersion % "test"
       )
-    ) ++ publishingSettings
+    ) ++ publishingSettings ++ scalariformSettings
   )
 
   lazy val _testAppName = "test-app"

@@ -2,9 +2,9 @@ package com.github.tototoshi.play2.aa
 
 import play.api._
 import scala.math._
-import java.io.{InputStream, File}
+import java.io.InputStream
 import javax.imageio._
-import java.awt.{Color, RenderingHints}
+import java.awt.{ Color, RenderingHints }
 import java.awt.image._
 import resource._
 
@@ -13,6 +13,16 @@ class AAPlugin(implicit app: Application) extends Plugin {
   private val asciiChars = List("#", "A", "@", "%", "$", "+", "=", "*", ":", ",", ".", " ")
 
   private val JAVA_AWT_HEADLESS = "java.awt.headless"
+
+  private val CONFIG_PATH_IMAGE_ON_START = "aa.image.onstart"
+
+  private val CONFIG_PATH_IMAGE_ON_STOP = "aa.image.onstop"
+
+  private val CONFIG_PATH_IMAGE_WIDTH = "aa.image.width"
+
+  private val DEFAULT_IMAGE_RESOURCE = "play-logo-normal.png"
+
+  private val DEFAULT_WIDTH = 80
 
   private def rgbMax(red: Int, green: Int, blue: Int) =
     List(red, green, blue).reduceLeft(max)
@@ -52,10 +62,9 @@ class AAPlugin(implicit app: Application) extends Plugin {
     spans.map(_.mkString).mkString("\n")
   }
 
-  private def imageWidth: Int = {
-    val defaultWidth = 150
-    app.configuration.getInt("aa.image.width").getOrElse(defaultWidth)
-  }
+  private def imageWidth: Int = app.configuration
+    .getInt(CONFIG_PATH_IMAGE_WIDTH)
+    .getOrElse(DEFAULT_WIDTH)
 
   private def withHeadless(f: => Unit): Unit = {
     val backup = Option(System.getProperty(JAVA_AWT_HEADLESS)).getOrElse("false")
@@ -65,28 +74,32 @@ class AAPlugin(implicit app: Application) extends Plugin {
   }
 
   private def printAA(resourceName: String): Unit = {
+    val imgResource = app
+      .configuration
+      .getString(resourceName)
+      .getOrElse(DEFAULT_IMAGE_RESOURCE)
+
+    Logger.debug(resourceName + ": " + imgResource)
+
     for {
-      r <- app.configuration.getString(resourceName)
-      _ = Logger.debug(resourceName + ": " + r)
-      in <- Play.resourceAsStream(r)
+      in <- Play.resourceAsStream(imgResource)
       managedIn <- managed(in)
     } {
       println(createAsciiArt(managedIn, imageWidth))
     }
   }
 
-
   /**
    * Called when the application starts.
    */
   override def onStart(): Unit =
-    withHeadless { printAA("aa.image.onstart") }
+    withHeadless { printAA(CONFIG_PATH_IMAGE_ON_START) }
 
   /**
    * Called when the application stops.
    */
   override def onStop(): Unit =
-    withHeadless { printAA("aa.image.onstop") }
+    withHeadless { printAA(CONFIG_PATH_IMAGE_ON_STOP) }
 
   /**
    * Is the plugin enabled?
