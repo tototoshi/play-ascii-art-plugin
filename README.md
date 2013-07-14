@@ -13,7 +13,7 @@ ref: http://yotuba.com/
 
 ## Install
 ```scala
-libraryDependencies ++= "com.github.tototoshi" %% "play2-ascii-art-plugin" % "0.1.0"
+libraryDependencies += "com.github.tototoshi" %% "play2-ascii-art-plugin" % "0.1.0"
 ```
 
 ## Configuration
