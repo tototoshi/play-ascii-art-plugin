@@ -32,6 +32,12 @@ aa.image.onstart=yotuba1.jpg
 aa.image.onstop=yotuba2.jpg
 ```
 
+URL can also be used.
+
+```
+aa.image.onstart="http://......"
+```
+
 The width of ascii-art is 80 by default. But maybe sometimes your images are too big or small.
 You can specify the width of ascii-art to adjust the image to your console.
 ```
