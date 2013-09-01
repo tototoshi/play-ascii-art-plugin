@@ -4,7 +4,7 @@ import sbt.Keys._
 
 object Build extends Build {
 
-  lazy val _version = "0.3.0"
+  lazy val _version = "0.3.1"
   lazy val _scalaVersion = "2.10.0"
   lazy val _playVersion = "2.1.1"
 
