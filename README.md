@@ -1,7 +1,7 @@
 # play2-ascii-art-plugin
 
 
-With this plugin, You will see cool ascii arts on starting/stopping your Play application. 
+With this plugin, You will see cool ascii arts on starting/stopping your Play application.
 They will motivate and accelerate your development. That is, AADD (Ascii Art Driven Development).
 
 
@@ -14,7 +14,7 @@ ref: http://yotuba.com/
 ## Install
 In your build.sbt or Build.scala.
 ```scala
-libraryDependencies += "com.github.tototoshi" %% "play2-ascii-art-plugin" % "0.2.0"
+libraryDependencies += "com.github.tototoshi" %% "play2-ascii-art-plugin" % "0.3.0"
 ```
 
 In your play.plugins.
