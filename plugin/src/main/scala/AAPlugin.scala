@@ -87,19 +87,14 @@ class AAPlugin(implicit app: Application) extends Plugin {
     }
   }
 
-
   private def printAA(resourceName: String): Unit = {
     val imgResource = app
       .configuration
       .getString(resourceName)
       .getOrElse(DEFAULT_IMAGE_RESOURCE)
 
-    Logger.debug(resourceName + ": " + imgResource)
-
     for {
-      r <- app.configuration.getString(resourceName)
-      _ = Logger.debug(resourceName + ": " + r)
-      in <- resourceAsStream(r)
+      in <- resourceAsStream(imgResource)
       managedIn <- managed(in)
     } {
       println(createAsciiArt(managedIn, imageWidth))
