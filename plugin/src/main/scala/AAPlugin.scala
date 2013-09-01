@@ -7,6 +7,7 @@ import javax.imageio._
 import java.awt.{ Color, RenderingHints }
 import java.awt.image._
 import resource._
+import java.net.URL
 
 class AAPlugin(implicit app: Application) extends Plugin {
 
@@ -73,6 +74,20 @@ class AAPlugin(implicit app: Application) extends Plugin {
     System.setProperty(JAVA_AWT_HEADLESS, backup)
   }
 
+  private def resourceAsStream(resourceName: String): Option[InputStream] = {
+
+    def isWebResource(resourceName: String): Boolean =
+      resourceName.startsWith("http://") || resourceName.startsWith("https://")
+
+    if (isWebResource(resourceName)) {
+      val url = new URL(resourceName)
+      Some(url.openConnection.getInputStream)
+    } else {
+      Play.resourceAsStream(resourceName)
+    }
+  }
+
+
   private def printAA(resourceName: String): Unit = {
     val imgResource = app
       .configuration
@@ -82,7 +97,9 @@ class AAPlugin(implicit app: Application) extends Plugin {
     Logger.debug(resourceName + ": " + imgResource)
 
     for {
-      in <- Play.resourceAsStream(imgResource)
+      r <- app.configuration.getString(resourceName)
+      _ = Logger.debug(resourceName + ": " + r)
+      in <- resourceAsStream(r)
       managedIn <- managed(in)
     } {
       println(createAsciiArt(managedIn, imageWidth))
